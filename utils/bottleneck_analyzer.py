@@ -1,124 +1,153 @@
 import torch
 import torch.nn as nn
-import numpy as np
+import psutil
+import os
+import time
 from collections import defaultdict
-from scipy import stats
-
+import numpy as np
 
 class LayerProfiler:
     def __init__(self):
         self.hooks = []
         self.layer_metrics = defaultdict(dict)
         self.input_shapes = {}
+        self.start_times = {}
+        self.process = psutil.Process(os.getpid())
 
-    def _calculate_conv_flops(self, conv_module, input_shape):
-        """精确的卷积FLOPs计算（包含分组卷积和dilation支持）"""
+    def _register_hooks(self, model):
+        """注册钩子到所有卷积层"""
+        for name, layer in model.named_modules():
+            if isinstance(layer, nn.Conv2d):
+                # 为内存测量注册前向钩子
+                def memory_hook(module, input, output, layer_name=name):
+                    current_memory = self.process.memory_info().rss / 1024 / 1024
+                    output_memory = output.nelement() * output.element_size() / 1024 / 1024
+                    input_memory = sum(
+                        [i.nelement() * i.element_size() for i in input if torch.is_tensor(i)]) / 1024 / 1024
+                    memory_increment = output_memory + input_memory * 0.2
+
+                    self.layer_metrics[layer_name]['memory'] = memory_increment
+                    self.input_shapes[layer_name] = input[0].shape
+
+                # 为延迟测量注册前向pre-hook
+                def timing_pre_hook(module, input, layer_name=name):
+                    self.start_times[layer_name] = time.time()
+
+                # 为延迟测量注册前向hook
+                def timing_hook(module, input, output, layer_name=name):
+                    end_time = time.time()
+                    start_time = self.start_times.get(layer_name, end_time)
+                    elapsed = end_time - start_time
+                    self.layer_metrics[layer_name]['latency'] = elapsed * 1000  # 转换为毫秒
+
+                # 注册钩子
+                self.hooks.append(layer.register_forward_pre_hook(timing_pre_hook))
+                self.hooks.append(layer.register_forward_hook(memory_hook))
+                self.hooks.append(layer.register_forward_hook(timing_hook))
+
+    def calculate_flops(self):
+        """计算每层的FLOPs"""
+        for layer_name, metrics in self.layer_metrics.items():
+            if layer_name in self.input_shapes:
+                input_shape = self.input_shapes[layer_name]
+                module = self._get_module_by_name(layer_name)
+                if module is not None:
+                    flops = self._calculate_conv_flops(module, input_shape)
+                    metrics['flops'] = flops
+
+    def _get_module_by_name(self, layer_name):
+        """通过名称获取模块"""
+        names = layer_name.split('.')
+        module = self.model
+        for name in names:
+            module = getattr(module, name)
+        return module
+
+    @staticmethod
+    def _calculate_conv_flops(conv_module, input_shape):
+        """计算卷积层的FLOPs"""
         batch_size, in_channels, height, width = input_shape
         out_channels = conv_module.out_channels
+        kernel_size = conv_module.kernel_size[0]
+        stride = conv_module.stride[0] if isinstance(conv_module.stride, tuple) else conv_module.stride
+        padding = conv_module.padding[0] if isinstance(conv_module.padding, tuple) else conv_module.padding
         groups = conv_module.groups
 
-        # 计算输出特征图尺寸
-        def _output_size(input_size, padding, dilation, kernel_size, stride):
-            return (input_size + 2 * padding - dilation * (kernel_size - 1) - 1) // stride + 1
+        out_height = (height + 2 * padding - kernel_size) // stride + 1
+        out_width = (width + 2 * padding - kernel_size) // stride + 1
 
-        output_height = _output_size(
-            height,
-            conv_module.padding[0],
-            conv_module.dilation[0],
-            conv_module.kernel_size[0],
-            conv_module.stride[0]
-        )
-        output_width = _output_size(
-            width,
-            conv_module.padding[1],
-            conv_module.dilation[1],
-            conv_module.kernel_size[1],
-            conv_module.stride[1]
-        )
-
-        # 每个位置的计算量 (考虑分组)
-        kernel_ops = conv_module.kernel_size[0] * conv_module.kernel_size[1] * (in_channels // groups)
-
-        # 总FLOPs (乘加算两次)
-        flops = batch_size * out_channels * output_height * output_width * kernel_ops * 2
-
-        # 添加bias项
-        if conv_module.bias is not None:
-            flops += batch_size * out_channels * output_height * output_width
+        if groups == 1:
+            flops = batch_size * out_channels * out_height * out_width * in_channels * kernel_size * kernel_size
+        else:
+            flops = batch_size * out_channels * out_height * out_width * (
+                        in_channels // groups) * kernel_size * kernel_size * groups
 
         return flops
 
-    def _register_hooks(self, model):
-        """注册FLOPs计算钩子"""
-        for name, module in model.named_modules():
-            if isinstance(module, nn.Conv2d):
-                def forward_hook(m, input, output, layer_name=name):
-                    self.input_shapes[layer_name] = input[0].shape
-                    flops = self._calculate_conv_flops(m, input[0].shape)
-                    self.layer_metrics[layer_name]['flops'] = flops
-
-                self.hooks.append(module.register_forward_hook(forward_hook))
-
     def profile_model(self, model, input_tensor):
-        """分析模型各层FLOPs"""
+        """分析模型性能"""
+        self.model = model
         self._register_hooks(model)
+
         with torch.no_grad():
-            model(input_tensor)
+            output = model(input_tensor)
+
+        self.calculate_flops()
 
         for hook in self.hooks:
             hook.remove()
 
         return self.layer_metrics
 
-
 def analyze_bottlenecks(layer_metrics, model_name, k=1.5):
-    """改进的瓶颈检测方法（科学计数法+对数尺度）"""
-    # 提取各指标值
-    flops_values = [m.get('flops', 1e-6) for m in layer_metrics.values()]
-    memory_values = [m.get('memory', 0) for m in layer_metrics.values()]
-    latency_values = [m.get('latency', 0) for m in layer_metrics.values()]
+    """分析并打印瓶颈层信息"""
+    if not layer_metrics:
+        return
 
-    # 转换FLOPs到对数尺度（避免大数值问题）
-    log_flops = np.log10(np.maximum(flops_values, 1e-6))
+    memory_values = []
+    flops_values = []
+    latency_values = []
 
-    # 计算各指标的Z-score
-    def calc_z_scores(values, log_scale=False):
-        if log_scale:
-            values = np.log10(np.maximum(values, 1e-6))
-        mean = np.mean(values)
-        std = np.std(values)
-        return np.abs((values - mean) / std)
+    for metrics in layer_metrics.values():
+        memory_values.append(metrics.get('memory', 0))
+        flops_values.append(metrics.get('flops', 0))
+        latency_values.append(metrics.get('latency', 0))
 
-    flops_z = calc_z_scores(flops_values, log_scale=True)
-    memory_z = calc_z_scores(memory_values)
-    latency_z = calc_z_scores(latency_values)
+    memory_mean = np.mean(memory_values)
+    memory_std = np.std(memory_values)
+    flops_mean = np.mean(flops_values)
+    flops_std = np.std(flops_values)
+    latency_mean = np.mean(latency_values)
+    latency_std = np.std(latency_values)
 
-    # 动态调整阈值（大模型更严格）
-    total_flops = sum(flops_values)
-    adaptive_k = k * (1 + np.log10(max(total_flops / 1e9, 1)))  # 每增加10GFLOPs，k增加0.1
+    memory_bottlenecks = []
+    flops_bottlenecks = []
+    latency_bottlenecks = []
 
-    # 检测瓶颈层
-    bottlenecks = defaultdict(list)
-    for i, (layer_name, metrics) in enumerate(layer_metrics.items()):
-        if flops_z[i] > adaptive_k:
-            bottlenecks['flops'].append((layer_name, metrics['flops']))
-        if memory_z[i] > adaptive_k:
-            bottlenecks['memory'].append((layer_name, metrics['memory']))
-        if latency_z[i] > adaptive_k:
-            bottlenecks['latency'].append((layer_name, metrics['latency']))
+    for layer_name, metrics in layer_metrics.items():
+        if metrics.get('memory', 0) > memory_mean + k * memory_std:
+            memory_bottlenecks.append((layer_name, metrics['memory']))
+        if metrics.get('flops', 0) > flops_mean + k * flops_std:
+            flops_bottlenecks.append((layer_name, metrics['flops']))
+        if metrics.get('latency', 0) > latency_mean + k * latency_std:
+            latency_bottlenecks.append((layer_name, metrics['latency']))
 
-    # 打印结果（科学计数法）
-    print(f"\n{model_name} Performance Summary (Threshold k={adaptive_k:.1f}):")
-    for metric, layers in bottlenecks.items():
-        if layers:
-            print(f"{metric.capitalize()} Bottleneck Layers:")
-            for layer, value in sorted(layers, key=lambda x: x[1], reverse=True):
-                if metric == 'flops':
-                    print(f"  {layer}: {value:.2e} FLOPs (Z-score: {flops_z[i]:.1f})")
-                else:
-                    print(
-                        f"  {layer}: {value:.2f} {'MB' if metric == 'memory' else 'ms'} (Z-score: {eval(f'{metric}_z[i]'):.1f})")
-        else:
-            print(f"No {metric} bottleneck layers found")
-
-    return bottlenecks
+    print(f"\n{model_name} Performance Summary:")
+    if memory_bottlenecks:
+        print("Memory Bottleneck Layers:")
+        for layer, memory in memory_bottlenecks:
+            print(f"  {layer}, Memory: {memory:.2f} MB")
+    else:
+        print("No memory bottleneck layers found.")
+    if flops_bottlenecks:
+        print("FLOPs Bottleneck Layers:")
+        for layer, flops in flops_bottlenecks:
+            print(f"  {layer}, FLOPs: {flops:.2e}")
+    else:
+        print("No FLOPs bottleneck layers found.")
+    if latency_bottlenecks:
+        print("Latency Bottleneck Layers:")
+        for layer, latency in latency_bottlenecks:
+            print(f"  {layer}, Latency: {latency:.2f} ms")
+    else:
+        print("No latency bottleneck layers found.")
