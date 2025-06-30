@@ -1,0 +1,21 @@
+strict digraph "" {
+	Conv2d_0	[color="#FF9AA2",
+		layer_name="features.2",
+		params=36928,
+		type=Conv2d];
+	ReLU_0	[color="#B5EAD7",
+		layer_name="features.3",
+		params=0,
+		type=ReLU];
+	Conv2d_0 -> ReLU_0;
+	MaxPool2d_0	[color="#FFDAC1",
+		layer_name="features.4",
+		params=0,
+		type=MaxPool2d];
+	ReLU_0 -> MaxPool2d_0;
+	Conv2d_1	[color="#FF9AA2",
+		layer_name="features.5",
+		params=73856,
+		type=Conv2d];
+	MaxPool2d_0 -> Conv2d_1;
+}

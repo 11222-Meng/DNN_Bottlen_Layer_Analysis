@@ -1,0 +1,21 @@
+strict digraph "" {
+	Conv2d_0	[color="#FF9AA2",
+		layer_name="layer4.2.conv2",
+		params=2359296,
+		type=Conv2d];
+	BatchNorm2d_0	[color="#C7CEEA",
+		layer_name="layer4.2.bn2",
+		params=1024,
+		type=BatchNorm2d];
+	Conv2d_0 -> BatchNorm2d_0;
+	Conv2d_1	[color="#FF9AA2",
+		layer_name="layer4.2.conv3",
+		params=1048576,
+		type=Conv2d];
+	BatchNorm2d_0 -> Conv2d_1;
+	BatchNorm2d_1	[color="#C7CEEA",
+		layer_name="layer4.2.bn3",
+		params=4096,
+		type=BatchNorm2d];
+	Conv2d_1 -> BatchNorm2d_1;
+}

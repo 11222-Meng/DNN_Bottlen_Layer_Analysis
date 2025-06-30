@@ -1,0 +1,16 @@
+strict digraph "" {
+	Conv2d_0	[color="#FF9AA2",
+		layer_name="features.18.0",
+		params=409600,
+		type=Conv2d];
+	BatchNorm2d_0	[color="#C7CEEA",
+		layer_name="features.18.1",
+		params=2560,
+		type=BatchNorm2d];
+	Conv2d_0 -> BatchNorm2d_0;
+	Linear_0	[color="#FFB7B2",
+		layer_name="classifier.1",
+		params=1281000,
+		type=Linear];
+	BatchNorm2d_0 -> Linear_0;
+}

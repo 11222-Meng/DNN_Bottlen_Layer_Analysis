@@ -3,6 +3,7 @@ import threading
 import psutil
 import os
 from utils.memory_monitor import monitor_memory_usage
+from utils.dag_generator import DAGGenerator  # 添加导入
 from utils.bottleneck_analyzer import LayerProfiler, analyze_bottlenecks
 
 def test_model_performance(model_name, model, input_tensor):
@@ -48,5 +49,29 @@ def test_model_performance(model_name, model, input_tensor):
         print(f"  Latency: {metrics.get('latency', 0):.2f} ms")
         print("-" * 50)
 
-    # 分析瓶颈层，传入 k=1.5
+        model = model.to('cpu').eval()
+
+        # 分析瓶颈层，传入 k=1.5
     analyze_bottlenecks(layer_metrics, model_name, k=1.5)
+
+    try:
+        dag_generator = DAGGenerator(expansion_N=3)
+        dags = dag_generator.generate_submodel_dags(
+            model,
+            model_name,
+            layer_metrics,
+            k=1.5
+        )
+
+        # 打印生成结果
+        print("\nGenerated Operator-Level DAGs:")
+        for metric, layer_dags in dags.items():
+            print(f"{metric.upper()} Bottlenecks:")
+            for layer_name, dag in layer_dags.items():
+                print(f"  - {layer_name}: {len(dag.nodes)} operators")
+
+    except Exception as e:
+        print(f"DAG Generation Error: {str(e)}")
+        dags = {}
+
+    return layer_metrics, dags
