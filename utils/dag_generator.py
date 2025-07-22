@@ -1,4 +1,6 @@
 import os
+
+import numpy as np
 import torch
 import torch.nn as nn
 import networkx as nx
@@ -14,7 +16,7 @@ except ImportError:
 
 
 class DAGGenerator:
-    def __init__(self, expansion_N=3):
+    def __init__(self, expansion_N=5):
         self.expansion_N = expansion_N
         self.dag_dir = "dags"
         os.makedirs(self.dag_dir, exist_ok=True)
@@ -81,7 +83,7 @@ class DAGGenerator:
         return G
 
     def _expand_bottleneck_layers(self, model, bottlenecks, all_layers):
-        """扩展瓶颈层范围"""
+        """双向扩展瓶颈层范围"""
         expanded_sets = {}
 
         for metric, layers in bottlenecks.items():
@@ -90,15 +92,14 @@ class DAGGenerator:
             for layer_name, _ in layers:
                 try:
                     idx = all_layers.index(layer_name)
+
+                    # 向前扩展
+                    start_idx = max(0, idx - self.expansion_N)
+                    # 向后扩展
                     end_idx = min(idx + self.expansion_N + 1, len(all_layers))
 
-                    # 动态调整扩展范围
-                    for i in range(idx + 1, end_idx):
-                        if any(all_layers[i] == b[0] for b_list in bottlenecks.values() for b in b_list):
-                            end_idx = i
-                            break
-
-                    expanded_sets[metric][layer_name] = all_layers[idx:end_idx]
+                    # 取消截断逻辑，让扩展完整执行
+                    expanded_sets[metric][layer_name] = all_layers[start_idx:end_idx]
                 except ValueError:
                     continue
 
@@ -194,3 +195,64 @@ class DAGGenerator:
             plt.close()
         except Exception as e:
             print(f"Visualization failed: {str(e)}")
+
+#切片点识别功能
+class SlicePointIdentifier:
+    def __init__(self,
+                 threshold=0.3,  # 统一使用threshold作为参数名
+                 cost_ratio_max=2.0,
+                 min_metric_value=1e-3):
+        self.feat_thresh = threshold  # 内部变量名可以不同
+        self.cost_ratio_max = cost_ratio_max
+        self.min_val = min_metric_value
+
+    def identify_slice_points(self, dag: nx.DiGraph, metric: str):
+        """增强版切片点识别"""
+        candidates = []
+
+        # 预处理：计算全图指标均值
+        all_metrics = [dag.nodes[n].get(metric, 0) for n in dag.nodes]
+        avg_metric = max(sum(all_metrics) / len(all_metrics), self.min_val)
+
+        for u, v in dag.edges():
+            u_metric = dag.nodes[u].get(metric, 0)
+            v_metric = dag.nodes[v].get(metric, 0)
+
+            # 动态阈值调整（基于当前边指标的相对大小）
+            dynamic_thresh = self.feat_thresh * (avg_metric / (v_metric + self.min_val))
+
+            # 特征尺寸计算（考虑张量形状）
+            feature_size = self._calc_real_feature_size(dag, u, v)
+
+            # 成本计算（考虑实际通信开销）
+            cut_cost = self._calc_cut_cost(dag, u, v)
+            fused_cost = self._calc_fused_cost(dag, u, v)
+            cost_ratio = cut_cost / (fused_cost + self.min_val)
+
+            if (feature_size > dynamic_thresh and
+                    cost_ratio < self.cost_ratio_max):
+                candidates.append({
+                    'edge': (u, v),
+                    'feature_size': feature_size,
+                    'cut_cost': cut_cost,
+                    'fused_cost': fused_cost,
+                    'score': feature_size / (cost_ratio + self.min_val)
+                })
+
+        return sorted(candidates, key=lambda x: -x['score'])
+
+    def _calc_real_feature_size(self, dag, u, v):
+        """基于实际输出张量形状计算特征尺寸"""
+        u_output_shape = dag.nodes[u].get('output_shape', [1])  # 假设有记录输出形状
+        v_output_shape = dag.nodes[v].get('output_shape', [1])
+        return (np.prod(v_output_shape) + 1) / (np.prod(u_output_shape) + 1)
+
+    def _calc_cut_cost(self, dag, u, v):
+        """考虑实际通信开销的切割成本"""
+        u_params = dag.nodes[u].get('params', 0)
+        v_params = dag.nodes[v].get('params', 0)
+        return 0.5 * u_params + 1.5 * v_params  # 模拟传输开销
+
+    def _calc_fused_cost(self, dag, u, v):
+        """考虑缓存命中的融合成本"""
+        return dag.nodes[u].get('latency', 0) + dag.nodes[v].get('latency', 0) * 0.8

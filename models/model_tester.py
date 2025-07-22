@@ -5,6 +5,8 @@ import os
 from utils.memory_monitor import monitor_memory_usage
 from utils.dag_generator import DAGGenerator  # 添加导入
 from utils.bottleneck_analyzer import LayerProfiler, analyze_bottlenecks
+from utils import SlicePointIdentifier
+
 
 def test_model_performance(model_name, model, input_tensor):
     """测试模型的综合性能"""
@@ -62,6 +64,21 @@ def test_model_performance(model_name, model, input_tensor):
             layer_metrics,
             k=1.5
         )
+        # 新增以下代码块
+        for metric, layer_dags in dags.items():
+            for layer_name, dag in layer_dags.items():
+                for node in dag.nodes():
+                    layer_name = dag.nodes[node]['layer_name']
+                    if layer_name in layer_metrics:
+                        dag.nodes[node].update(layer_metrics[layer_name])
+        # 为每个DAG添加指标信息
+        for metric, layer_dags in dags.items():
+            for layer_name, dag in layer_dags.items():
+                # 添加节点指标信息
+                for node in dag.nodes():
+                    layer_name = dag.nodes[node]['layer_name']
+                    if layer_name in layer_metrics:
+                        dag.nodes[node].update(layer_metrics[layer_name])
 
         # 打印生成结果
         print("\nGenerated Operator-Level DAGs:")

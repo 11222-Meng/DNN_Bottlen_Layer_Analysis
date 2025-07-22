@@ -1,0 +1,16 @@
+strict digraph "" {
+	Conv2d_0	[color="#FF9AA2",
+		layer_name="layer3.22.conv3",
+		params=262144,
+		type=Conv2d];
+	BatchNorm2d_0	[color="#C7CEEA",
+		layer_name="layer3.22.bn3",
+		params=2048,
+		type=BatchNorm2d];
+	Conv2d_0 -> BatchNorm2d_0;
+	ReLU_0	[color="#B5EAD7",
+		layer_name="layer3.22.relu",
+		params=0,
+		type=ReLU];
+	BatchNorm2d_0 -> ReLU_0;
+}

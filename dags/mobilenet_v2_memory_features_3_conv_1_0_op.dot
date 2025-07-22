@@ -1,21 +1,36 @@
 strict digraph "" {
+	BatchNorm2d_0	[color="#C7CEEA",
+		layer_name="features.2.conv.3",
+		params=48,
+		type=BatchNorm2d];
 	Conv2d_0	[color="#FF9AA2",
+		layer_name="features.3.conv.0.0",
+		params=3456,
+		type=Conv2d];
+	BatchNorm2d_0 -> Conv2d_0;
+	BatchNorm2d_1	[color="#C7CEEA",
+		layer_name="features.3.conv.0.1",
+		params=288,
+		type=BatchNorm2d];
+	Conv2d_0 -> BatchNorm2d_1;
+	Conv2d_1	[color="#FF9AA2",
 		layer_name="features.3.conv.1.0",
 		params=1296,
 		type=Conv2d];
-	BatchNorm2d_0	[color="#C7CEEA",
+	BatchNorm2d_1 -> Conv2d_1;
+	BatchNorm2d_2	[color="#C7CEEA",
 		layer_name="features.3.conv.1.1",
 		params=288,
 		type=BatchNorm2d];
-	Conv2d_0 -> BatchNorm2d_0;
-	Conv2d_1	[color="#FF9AA2",
+	Conv2d_1 -> BatchNorm2d_2;
+	Conv2d_2	[color="#FF9AA2",
 		layer_name="features.3.conv.2",
 		params=3456,
 		type=Conv2d];
-	BatchNorm2d_0 -> Conv2d_1;
-	BatchNorm2d_1	[color="#C7CEEA",
+	BatchNorm2d_2 -> Conv2d_2;
+	BatchNorm2d_3	[color="#C7CEEA",
 		layer_name="features.3.conv.3",
 		params=48,
 		type=BatchNorm2d];
-	Conv2d_1 -> BatchNorm2d_1;
+	Conv2d_2 -> BatchNorm2d_3;
 }

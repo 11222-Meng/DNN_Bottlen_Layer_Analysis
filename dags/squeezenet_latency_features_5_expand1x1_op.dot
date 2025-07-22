@@ -1,0 +1,11 @@
+strict digraph "" {
+	Conv2d_0	[color="#FF9AA2",
+		layer_name="features.5.expand1x1",
+		params=4224,
+		type=Conv2d];
+	ReLU_0	[color="#B5EAD7",
+		layer_name="features.5.expand1x1_activation",
+		params=0,
+		type=ReLU];
+	Conv2d_0 -> ReLU_0;
+}

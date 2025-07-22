@@ -1,0 +1,21 @@
+strict digraph "" {
+	Conv2d_0	[color="#FF9AA2",
+		layer_name="features.5.conv.1.0",
+		params=1728,
+		type=Conv2d];
+	BatchNorm2d_0	[color="#C7CEEA",
+		layer_name="features.5.conv.1.1",
+		params=384,
+		type=BatchNorm2d];
+	Conv2d_0 -> BatchNorm2d_0;
+	Conv2d_1	[color="#FF9AA2",
+		layer_name="features.5.conv.2",
+		params=6144,
+		type=Conv2d];
+	BatchNorm2d_0 -> Conv2d_1;
+	BatchNorm2d_1	[color="#C7CEEA",
+		layer_name="features.5.conv.3",
+		params=64,
+		type=BatchNorm2d];
+	Conv2d_1 -> BatchNorm2d_1;
+}

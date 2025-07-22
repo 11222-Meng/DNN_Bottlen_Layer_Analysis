@@ -91,7 +91,9 @@ class LayerProfiler:
 
         with torch.no_grad():
             output = model(input_tensor)
-
+        for name, module in model.named_modules():
+            if hasattr(module, 'output_shape'):
+                self.layer_metrics[name]['output_shape'] = module.output_shape.shape
         self.calculate_flops()
 
         for hook in self.hooks:
