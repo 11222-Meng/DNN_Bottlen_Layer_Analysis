@@ -3,19 +3,14 @@ strict digraph "" {
 		layer_name=conv1,
 		params=9408,
 		type=Conv2d];
-	BatchNorm2d_0	[color="#C7CEEA",
-		layer_name=bn1,
-		params=128,
-		type=BatchNorm2d];
-	Conv2d_0 -> BatchNorm2d_0;
-	ReLU_0	[color="#B5EAD7",
-		layer_name=relu,
-		params=0,
-		type=ReLU];
-	BatchNorm2d_0 -> ReLU_0;
-	MaxPool2d_0	[color="#FFDAC1",
-		layer_name=maxpool,
-		params=0,
-		type=MaxPool2d];
-	ReLU_0 -> MaxPool2d_0;
+	Conv2d_1	[color="#FF9AA2",
+		layer_name="layer1.0.conv1",
+		params=4096,
+		type=Conv2d];
+	Conv2d_0 -> Conv2d_1;
+	Conv2d_2	[color="#FF9AA2",
+		layer_name="layer1.0.conv2",
+		params=36864,
+		type=Conv2d];
+	Conv2d_1 -> Conv2d_2;
 }

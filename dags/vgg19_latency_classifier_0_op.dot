@@ -1,0 +1,26 @@
+strict digraph "" {
+	Conv2d_0	[color="#FF9AA2",
+		layer_name="features.32",
+		params=2359808,
+		type=Conv2d];
+	Conv2d_1	[color="#FF9AA2",
+		layer_name="features.34",
+		params=2359808,
+		type=Conv2d];
+	Conv2d_0 -> Conv2d_1;
+	Linear_0	[color="#FFB7B2",
+		layer_name="classifier.0",
+		params=102764544,
+		type=Linear];
+	Conv2d_1 -> Linear_0;
+	Linear_1	[color="#FFB7B2",
+		layer_name="classifier.3",
+		params=16781312,
+		type=Linear];
+	Linear_0 -> Linear_1;
+	Linear_2	[color="#FFB7B2",
+		layer_name="classifier.6",
+		params=4097000,
+		type=Linear];
+	Linear_1 -> Linear_2;
+}

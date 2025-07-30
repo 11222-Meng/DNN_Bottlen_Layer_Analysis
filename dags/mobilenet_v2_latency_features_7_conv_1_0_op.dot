@@ -1,26 +1,26 @@
 strict digraph "" {
 	Conv2d_0	[color="#FF9AA2",
-		layer_name="features.5.squeeze",
-		params=4128,
+		layer_name="features.6.conv.2",
+		params=6144,
 		type=Conv2d];
 	Conv2d_1	[color="#FF9AA2",
-		layer_name="features.5.expand1x1",
-		params=4224,
+		layer_name="features.7.conv.0.0",
+		params=6144,
 		type=Conv2d];
 	Conv2d_0 -> Conv2d_1;
 	Conv2d_2	[color="#FF9AA2",
-		layer_name="features.5.expand3x3",
-		params=36992,
+		layer_name="features.7.conv.1.0",
+		params=1728,
 		type=Conv2d];
 	Conv2d_1 -> Conv2d_2;
 	Conv2d_3	[color="#FF9AA2",
-		layer_name="features.7.squeeze",
-		params=8224,
+		layer_name="features.7.conv.2",
+		params=12288,
 		type=Conv2d];
 	Conv2d_2 -> Conv2d_3;
 	Conv2d_4	[color="#FF9AA2",
-		layer_name="features.7.expand1x1",
-		params=4224,
+		layer_name="features.8.conv.0.0",
+		params=24576,
 		type=Conv2d];
 	Conv2d_3 -> Conv2d_4;
 }

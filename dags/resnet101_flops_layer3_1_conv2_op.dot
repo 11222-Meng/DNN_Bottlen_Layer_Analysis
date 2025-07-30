@@ -1,0 +1,331 @@
+strict digraph "" {
+	Conv2d_0	[color="#FF9AA2",
+		layer_name="layer3.1.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_1	[color="#FF9AA2",
+		layer_name="layer3.1.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_0 -> Conv2d_1;
+	Conv2d_2	[color="#FF9AA2",
+		layer_name="layer3.1.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_1 -> Conv2d_2;
+	Conv2d_3	[color="#FF9AA2",
+		layer_name="layer3.2.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_2 -> Conv2d_3;
+	Conv2d_4	[color="#FF9AA2",
+		layer_name="layer3.2.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_3 -> Conv2d_4;
+	Conv2d_5	[color="#FF9AA2",
+		layer_name="layer3.2.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_4 -> Conv2d_5;
+	Conv2d_6	[color="#FF9AA2",
+		layer_name="layer3.3.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_5 -> Conv2d_6;
+	Conv2d_7	[color="#FF9AA2",
+		layer_name="layer3.3.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_6 -> Conv2d_7;
+	Conv2d_8	[color="#FF9AA2",
+		layer_name="layer3.3.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_7 -> Conv2d_8;
+	Conv2d_9	[color="#FF9AA2",
+		layer_name="layer3.4.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_8 -> Conv2d_9;
+	Conv2d_10	[color="#FF9AA2",
+		layer_name="layer3.4.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_9 -> Conv2d_10;
+	Conv2d_11	[color="#FF9AA2",
+		layer_name="layer3.4.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_10 -> Conv2d_11;
+	Conv2d_12	[color="#FF9AA2",
+		layer_name="layer3.5.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_11 -> Conv2d_12;
+	Conv2d_13	[color="#FF9AA2",
+		layer_name="layer3.5.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_12 -> Conv2d_13;
+	Conv2d_14	[color="#FF9AA2",
+		layer_name="layer3.5.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_13 -> Conv2d_14;
+	Conv2d_15	[color="#FF9AA2",
+		layer_name="layer3.6.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_14 -> Conv2d_15;
+	Conv2d_16	[color="#FF9AA2",
+		layer_name="layer3.6.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_15 -> Conv2d_16;
+	Conv2d_17	[color="#FF9AA2",
+		layer_name="layer3.6.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_16 -> Conv2d_17;
+	Conv2d_18	[color="#FF9AA2",
+		layer_name="layer3.7.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_17 -> Conv2d_18;
+	Conv2d_19	[color="#FF9AA2",
+		layer_name="layer3.7.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_18 -> Conv2d_19;
+	Conv2d_20	[color="#FF9AA2",
+		layer_name="layer3.7.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_19 -> Conv2d_20;
+	Conv2d_21	[color="#FF9AA2",
+		layer_name="layer3.8.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_20 -> Conv2d_21;
+	Conv2d_22	[color="#FF9AA2",
+		layer_name="layer3.8.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_21 -> Conv2d_22;
+	Conv2d_23	[color="#FF9AA2",
+		layer_name="layer3.8.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_22 -> Conv2d_23;
+	Conv2d_24	[color="#FF9AA2",
+		layer_name="layer3.9.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_23 -> Conv2d_24;
+	Conv2d_25	[color="#FF9AA2",
+		layer_name="layer3.9.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_24 -> Conv2d_25;
+	Conv2d_26	[color="#FF9AA2",
+		layer_name="layer3.9.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_25 -> Conv2d_26;
+	Conv2d_27	[color="#FF9AA2",
+		layer_name="layer3.10.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_26 -> Conv2d_27;
+	Conv2d_28	[color="#FF9AA2",
+		layer_name="layer3.10.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_27 -> Conv2d_28;
+	Conv2d_29	[color="#FF9AA2",
+		layer_name="layer3.10.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_28 -> Conv2d_29;
+	Conv2d_30	[color="#FF9AA2",
+		layer_name="layer3.11.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_29 -> Conv2d_30;
+	Conv2d_31	[color="#FF9AA2",
+		layer_name="layer3.11.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_30 -> Conv2d_31;
+	Conv2d_32	[color="#FF9AA2",
+		layer_name="layer3.11.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_31 -> Conv2d_32;
+	Conv2d_33	[color="#FF9AA2",
+		layer_name="layer3.12.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_32 -> Conv2d_33;
+	Conv2d_34	[color="#FF9AA2",
+		layer_name="layer3.12.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_33 -> Conv2d_34;
+	Conv2d_35	[color="#FF9AA2",
+		layer_name="layer3.12.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_34 -> Conv2d_35;
+	Conv2d_36	[color="#FF9AA2",
+		layer_name="layer3.13.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_35 -> Conv2d_36;
+	Conv2d_37	[color="#FF9AA2",
+		layer_name="layer3.13.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_36 -> Conv2d_37;
+	Conv2d_38	[color="#FF9AA2",
+		layer_name="layer3.13.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_37 -> Conv2d_38;
+	Conv2d_39	[color="#FF9AA2",
+		layer_name="layer3.14.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_38 -> Conv2d_39;
+	Conv2d_40	[color="#FF9AA2",
+		layer_name="layer3.14.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_39 -> Conv2d_40;
+	Conv2d_41	[color="#FF9AA2",
+		layer_name="layer3.14.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_40 -> Conv2d_41;
+	Conv2d_42	[color="#FF9AA2",
+		layer_name="layer3.15.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_41 -> Conv2d_42;
+	Conv2d_43	[color="#FF9AA2",
+		layer_name="layer3.15.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_42 -> Conv2d_43;
+	Conv2d_44	[color="#FF9AA2",
+		layer_name="layer3.15.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_43 -> Conv2d_44;
+	Conv2d_45	[color="#FF9AA2",
+		layer_name="layer3.16.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_44 -> Conv2d_45;
+	Conv2d_46	[color="#FF9AA2",
+		layer_name="layer3.16.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_45 -> Conv2d_46;
+	Conv2d_47	[color="#FF9AA2",
+		layer_name="layer3.16.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_46 -> Conv2d_47;
+	Conv2d_48	[color="#FF9AA2",
+		layer_name="layer3.17.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_47 -> Conv2d_48;
+	Conv2d_49	[color="#FF9AA2",
+		layer_name="layer3.17.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_48 -> Conv2d_49;
+	Conv2d_50	[color="#FF9AA2",
+		layer_name="layer3.17.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_49 -> Conv2d_50;
+	Conv2d_51	[color="#FF9AA2",
+		layer_name="layer3.18.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_50 -> Conv2d_51;
+	Conv2d_52	[color="#FF9AA2",
+		layer_name="layer3.18.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_51 -> Conv2d_52;
+	Conv2d_53	[color="#FF9AA2",
+		layer_name="layer3.18.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_52 -> Conv2d_53;
+	Conv2d_54	[color="#FF9AA2",
+		layer_name="layer3.19.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_53 -> Conv2d_54;
+	Conv2d_55	[color="#FF9AA2",
+		layer_name="layer3.19.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_54 -> Conv2d_55;
+	Conv2d_56	[color="#FF9AA2",
+		layer_name="layer3.19.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_55 -> Conv2d_56;
+	Conv2d_57	[color="#FF9AA2",
+		layer_name="layer3.20.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_56 -> Conv2d_57;
+	Conv2d_58	[color="#FF9AA2",
+		layer_name="layer3.20.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_57 -> Conv2d_58;
+	Conv2d_59	[color="#FF9AA2",
+		layer_name="layer3.20.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_58 -> Conv2d_59;
+	Conv2d_60	[color="#FF9AA2",
+		layer_name="layer3.21.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_59 -> Conv2d_60;
+	Conv2d_61	[color="#FF9AA2",
+		layer_name="layer3.21.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_60 -> Conv2d_61;
+	Conv2d_62	[color="#FF9AA2",
+		layer_name="layer3.21.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_61 -> Conv2d_62;
+	Conv2d_63	[color="#FF9AA2",
+		layer_name="layer3.22.conv1",
+		params=262144,
+		type=Conv2d];
+	Conv2d_62 -> Conv2d_63;
+	Conv2d_64	[color="#FF9AA2",
+		layer_name="layer3.22.conv2",
+		params=589824,
+		type=Conv2d];
+	Conv2d_63 -> Conv2d_64;
+	Conv2d_65	[color="#FF9AA2",
+		layer_name="layer3.22.conv3",
+		params=262144,
+		type=Conv2d];
+	Conv2d_64 -> Conv2d_65;
+}

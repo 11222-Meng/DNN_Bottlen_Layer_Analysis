@@ -1,0 +1,101 @@
+strict digraph "" {
+	Conv2d_0	[color="#FF9AA2",
+		layer_name="features.7.conv.2",
+		params=12288,
+		type=Conv2d];
+	Conv2d_1	[color="#FF9AA2",
+		layer_name="features.8.conv.0.0",
+		params=24576,
+		type=Conv2d];
+	Conv2d_0 -> Conv2d_1;
+	Conv2d_2	[color="#FF9AA2",
+		layer_name="features.8.conv.1.0",
+		params=3456,
+		type=Conv2d];
+	Conv2d_1 -> Conv2d_2;
+	Conv2d_3	[color="#FF9AA2",
+		layer_name="features.8.conv.2",
+		params=24576,
+		type=Conv2d];
+	Conv2d_2 -> Conv2d_3;
+	Conv2d_4	[color="#FF9AA2",
+		layer_name="features.9.conv.0.0",
+		params=24576,
+		type=Conv2d];
+	Conv2d_3 -> Conv2d_4;
+	Conv2d_5	[color="#FF9AA2",
+		layer_name="features.9.conv.1.0",
+		params=3456,
+		type=Conv2d];
+	Conv2d_4 -> Conv2d_5;
+	Conv2d_6	[color="#FF9AA2",
+		layer_name="features.9.conv.2",
+		params=24576,
+		type=Conv2d];
+	Conv2d_5 -> Conv2d_6;
+	Conv2d_7	[color="#FF9AA2",
+		layer_name="features.10.conv.0.0",
+		params=24576,
+		type=Conv2d];
+	Conv2d_6 -> Conv2d_7;
+	Conv2d_8	[color="#FF9AA2",
+		layer_name="features.10.conv.1.0",
+		params=3456,
+		type=Conv2d];
+	Conv2d_7 -> Conv2d_8;
+	Conv2d_9	[color="#FF9AA2",
+		layer_name="features.10.conv.2",
+		params=24576,
+		type=Conv2d];
+	Conv2d_8 -> Conv2d_9;
+	Conv2d_10	[color="#FF9AA2",
+		layer_name="features.11.conv.0.0",
+		params=24576,
+		type=Conv2d];
+	Conv2d_9 -> Conv2d_10;
+	Conv2d_11	[color="#FF9AA2",
+		layer_name="features.11.conv.1.0",
+		params=3456,
+		type=Conv2d];
+	Conv2d_10 -> Conv2d_11;
+	Conv2d_12	[color="#FF9AA2",
+		layer_name="features.11.conv.2",
+		params=36864,
+		type=Conv2d];
+	Conv2d_11 -> Conv2d_12;
+	Conv2d_13	[color="#FF9AA2",
+		layer_name="features.12.conv.0.0",
+		params=55296,
+		type=Conv2d];
+	Conv2d_12 -> Conv2d_13;
+	Conv2d_14	[color="#FF9AA2",
+		layer_name="features.12.conv.1.0",
+		params=5184,
+		type=Conv2d];
+	Conv2d_13 -> Conv2d_14;
+	Conv2d_15	[color="#FF9AA2",
+		layer_name="features.12.conv.2",
+		params=55296,
+		type=Conv2d];
+	Conv2d_14 -> Conv2d_15;
+	Conv2d_16	[color="#FF9AA2",
+		layer_name="features.13.conv.0.0",
+		params=55296,
+		type=Conv2d];
+	Conv2d_15 -> Conv2d_16;
+	Conv2d_17	[color="#FF9AA2",
+		layer_name="features.13.conv.1.0",
+		params=5184,
+		type=Conv2d];
+	Conv2d_16 -> Conv2d_17;
+	Conv2d_18	[color="#FF9AA2",
+		layer_name="features.13.conv.2",
+		params=55296,
+		type=Conv2d];
+	Conv2d_17 -> Conv2d_18;
+	Conv2d_19	[color="#FF9AA2",
+		layer_name="features.14.conv.0.0",
+		params=55296,
+		type=Conv2d];
+	Conv2d_18 -> Conv2d_19;
+}

@@ -1,0 +1,41 @@
+strict digraph "" {
+	Conv2d_0	[color="#FF9AA2",
+		layer_name="features.11.conv.2",
+		params=36864,
+		type=Conv2d];
+	Conv2d_1	[color="#FF9AA2",
+		layer_name="features.12.conv.0.0",
+		params=55296,
+		type=Conv2d];
+	Conv2d_0 -> Conv2d_1;
+	Conv2d_2	[color="#FF9AA2",
+		layer_name="features.12.conv.1.0",
+		params=5184,
+		type=Conv2d];
+	Conv2d_1 -> Conv2d_2;
+	Conv2d_3	[color="#FF9AA2",
+		layer_name="features.12.conv.2",
+		params=55296,
+		type=Conv2d];
+	Conv2d_2 -> Conv2d_3;
+	Conv2d_4	[color="#FF9AA2",
+		layer_name="features.13.conv.0.0",
+		params=55296,
+		type=Conv2d];
+	Conv2d_3 -> Conv2d_4;
+	Conv2d_5	[color="#FF9AA2",
+		layer_name="features.13.conv.1.0",
+		params=5184,
+		type=Conv2d];
+	Conv2d_4 -> Conv2d_5;
+	Conv2d_6	[color="#FF9AA2",
+		layer_name="features.13.conv.2",
+		params=55296,
+		type=Conv2d];
+	Conv2d_5 -> Conv2d_6;
+	Conv2d_7	[color="#FF9AA2",
+		layer_name="features.14.conv.0.0",
+		params=55296,
+		type=Conv2d];
+	Conv2d_6 -> Conv2d_7;
+}
